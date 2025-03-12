@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "Client" ADD COLUMN     "defaultAmount" INTEGER NOT NULL DEFAULT 750,
+ALTER COLUMN "email" DROP DEFAULT;
