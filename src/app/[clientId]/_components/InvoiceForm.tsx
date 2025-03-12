@@ -25,7 +25,7 @@ const InvoiceForm = ({ defaultAmount }: IInvoiceFormProps) => {
             "dueDate",
             dayjs(issueDateValue).add(14, "days")
         );
-    }, [issueDateValue]);
+    }, [issueDateValue, invoiceForm]);
 
     useEffect(() => {
         const gstAmount = Number((0.1 * amountValue).toFixed(2));
@@ -34,7 +34,7 @@ const InvoiceForm = ({ defaultAmount }: IInvoiceFormProps) => {
             gstAmount,
             totalAmount: Number(amountValue) + gstAmount,
         });
-    }, [amountValue]);
+    }, [amountValue, invoiceForm]);
 
     const handleFormFinish = async (formData: any) => {
         const invoicePeriodArr = [
