@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import { FileTextOutlined } from "@ant-design/icons";
 import { Button, Col, DatePicker, Form, Input, Row } from "antd";
 import dayjs from "dayjs";
@@ -14,6 +14,8 @@ interface IInvoiceFormProps {
 }
 
 const InvoiceForm = ({ defaultAmount }: IInvoiceFormProps) => {
+    const [isCreatingInvoice, setIsCreatingInvoice] = useState(false);
+
     const [invoiceForm] = Form.useForm();
     const issueDateValue = useWatch("issueDate", invoiceForm) || dayjs();
     const amountValue = useWatch("amount", invoiceForm);
@@ -42,13 +44,17 @@ const InvoiceForm = ({ defaultAmount }: IInvoiceFormProps) => {
             dayjs(formData.invoicePeriod).year(),
         ] as [number, number];
 
+        setIsCreatingInvoice(true);
+
         const invoice = await createInvoice(
             Number(clientId),
-            formData.issueDate,
-            formData.dueDate,
+            formData.issueDate.toISOString(),
+            formData.dueDate.toISOString(),
             invoicePeriodArr,
             Number(formData.amount)
         );
+
+        setIsCreatingInvoice(false);
 
         console.log(invoice);
     };
@@ -111,6 +117,7 @@ const InvoiceForm = ({ defaultAmount }: IInvoiceFormProps) => {
                         className="w-full"
                         icon={<FileTextOutlined />}
                         htmlType="submit"
+                        loading={isCreatingInvoice}
                     >
                         Generate and Send Invoice
                     </Button>

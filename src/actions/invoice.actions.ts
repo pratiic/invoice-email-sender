@@ -12,8 +12,8 @@ export const createInvoice = async (
     const invoice = await prisma.invoice.create({
         data: {
             clientId,
-            issueDate,
-            dueDate,
+            issueDate: new Date(issueDate),
+            dueDate: new Date(dueDate),
             servicePeriod,
             amount,
         },
@@ -21,3 +21,5 @@ export const createInvoice = async (
 
     return invoice;
 };
+
+export const sendInvoiceEmail = async () => {};

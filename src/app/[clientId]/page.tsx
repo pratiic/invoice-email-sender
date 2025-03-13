@@ -3,12 +3,12 @@ import prisma from "../../../lib/prisma";
 import InvoiceForm from "./_components/InvoiceForm";
 
 interface IClientPageProps {
-    params: {
-        clientId: string;
-    };
+    params: Promise<{ clientId: string }>;
 }
 
-const ClientPage = async ({ params: { clientId } }: IClientPageProps) => {
+const ClientPage = async ({ params }: IClientPageProps) => {
+    const { clientId } = await params;
+
     const client = await prisma.client.findUnique({
         where: { id: Number(clientId) },
     });
