@@ -8,7 +8,6 @@ import { useParams, useRouter } from "next/navigation";
 import { useWatch } from "antd/es/form/Form";
 
 import { createInvoice } from "@/actions/invoice.actions";
-import { sendInvoiceEmail } from "../../../../lib/email";
 import routes from "@/utils/routes.utils";
 
 import html2canvas from "html2canvas";
@@ -63,8 +62,6 @@ const InvoiceForm = ({ defaultAmount }: IInvoiceFormProps) => {
     };
 
     const handleFormFinish = async (formData: any) => {
-        sendInvoiceEmail();
-
         const invoicePeriodArr = [
             dayjs(formData.invoicePeriod).month(),
             dayjs(formData.invoicePeriod).year(),

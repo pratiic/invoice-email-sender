@@ -6,7 +6,7 @@ import { numToMonthMap } from "@/utils/date-time.utils";
 
 interface IInvoiceTableProps {
     issueDate: Date;
-    defaultAmount: Number;
+    defaultAmount: number;
 }
 
 const InvoiceTable = ({ issueDate, defaultAmount }: IInvoiceTableProps) => {
