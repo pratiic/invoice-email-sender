@@ -21,5 +21,3 @@ export const createInvoice = async (
 
     return invoice;
 };
-
-export const sendInvoiceEmail = async () => {};

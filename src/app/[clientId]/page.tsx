@@ -6,6 +6,14 @@ interface IClientPageProps {
     params: Promise<{ clientId: string }>;
 }
 
+export async function generateStaticParams() {
+    const clients = await prisma.client.findMany();
+
+    return clients.map((client) => {
+        return { clientId: String(client.id) };
+    });
+}
+
 const ClientPage = async ({ params }: IClientPageProps) => {
     const { clientId } = await params;
 
