@@ -1,11 +1,10 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import InvoiceTable from "./InvoiceTable";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
-import { Button } from "antd";
-import { ArrowDownOutlined } from "@ant-design/icons";
+import { Spin } from "antd";
 import { useRouter } from "next/navigation";
 import { Invoice, Client } from "@prisma/client";
 
@@ -18,6 +17,7 @@ interface IInvoiceCoreProps {
 
 const InvoiceCore = ({ invoice }: IInvoiceCoreProps) => {
     const [isDownloading, setIsDownloading] = useState(false);
+    const [isDownloaded, setIsDownloaded] = useState(false);
 
     const invoiceRef = useRef<HTMLDivElement | null>(null);
 
@@ -49,12 +49,21 @@ const InvoiceCore = ({ invoice }: IInvoiceCoreProps) => {
         );
 
         setIsDownloading(false);
+        setIsDownloaded(true);
         router.push(routes.homePath());
     };
 
+    useEffect(() => {
+        if (invoiceRef.current && !isDownloading && !isDownloaded) {
+            setTimeout(() => {
+                downloadInvoice();
+            }, 200);
+        }
+    }, [invoiceRef]);
+
     return (
         <div className="w-[calc(100vw-12px)] overflow-hidden">
-            <div className="flex flex-col items-center space-y-3 absolute left-0 top-0 py-3 z-10 h-screen w-screen overflow-hidden bg-white">
+            <div className="flex flex-col items-center space-y-3 absolute left-0 top-0 py-3 z-10 h-screen w-screen overflow-hidden bg-white pt-[200px]">
                 <p className="text-center text-sm">
                     Invoice for{" "}
                     <span className="font-semibold">
@@ -67,18 +76,11 @@ const InvoiceCore = ({ invoice }: IInvoiceCoreProps) => {
                     </span>{" "}
                     to{" "}
                     <span className="font-semibold">{invoice.client.name}</span>{" "}
-                    has been successfully created. You may now download it.
+                    has been successfully created. It will be downloaded
+                    shortly.
                 </p>
 
-                <Button
-                    icon={<ArrowDownOutlined />}
-                    className="w-fit"
-                    type="primary"
-                    loading={isDownloading}
-                    onClick={downloadInvoice}
-                >
-                    Download Invoice
-                </Button>
+                <Spin />
             </div>
 
             <section className="space-y-5 p-5 w-[800px]" ref={invoiceRef}>
